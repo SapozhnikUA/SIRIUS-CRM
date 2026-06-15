@@ -2,6 +2,9 @@
 // @name         Sirius CRM
 // @namespace    https://github.com/SapozhnikUA
 // @version      1.0.0
+// @homepageURL  https://github.com/SapozhnikUA/SIRIUS-CRM/
+// @downloadURL  https://github.com/SapozhnikUA/SIRIUS-CRM/raw/refs/heads/main/sirius-crm.user.js
+// @updateURL    https://github.com/SapozhnikUA/SIRIUS-CRM/raw/refs/heads/main/sirius-crm.user.js
 // @description  Barcode formatter + red notification badge
 // @author       SapozhnikUA
 // @match        https://sirius-crm.beko.com/*
