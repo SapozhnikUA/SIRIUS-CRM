@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         Sirius CRM
 // @namespace    https://github.com/SapozhnikUA
-// @version      1.3.0
+// @version      1.5.0
 // @homepageURL  https://github.com/SapozhnikUA/SIRIUS-CRM/
 // @downloadURL  https://github.com/SapozhnikUA/SIRIUS-CRM/raw/refs/heads/main/sirius-crm.user.js
 // @updateURL    https://github.com/SapozhnikUA/SIRIUS-CRM/raw/refs/heads/main/sirius-crm.user.js
 // @description  Barcode formatter + copy-on-click (both halves) + red notification badge + WO/WC id nowrap + phone copy button
 // @author       SapozhnikUA
 // @match        https://sirius-crm.beko.com/*
+// @match        https://sirius-test.beko.com/*
+// @include      /^https://sirius-[^.]+\.beko\.com\//
 // @grant        none
 // ==/UserScript==
 
@@ -17,6 +19,11 @@
   // ── Styles ───────────────────────────────────────────────────────────────
   const style = document.createElement('style');
   style.textContent = `
+    /* Page zoom */
+    body {
+      zoom: 90%;
+    }
+
     /* Red notification badge */
     .MuiBadge-badge.scs-badge-alert {
       background-color: #e53935 !important;
@@ -75,9 +82,11 @@
   document.head.appendChild(style);
 
   // ── 1. Barcode formatter + copy-on-click ────────────────────────────────
-  // "Штрих-код:XXXXXXXXXXXXXXXXXXXX" → "Штрих-код: <span>XXXXXXXXXX</span>  * XXXXXXXXXX"
-  // Clicking the first 10-digit span selects it (and copies to clipboard) without spaces.
-  const BARCODE_RE = /Штрих-код:\s*(\d{10})(\d{10})/;
+  // Supports two formats:
+  //   10+10 digits: "Штрих-код:XXXXXXXXXXXXXXXXXXXX"   → "Штрих-код: XXXXXXXXXX * XXXXXXXXXX"
+  //   12+12 digits: "Штрих-код:XXXXXXXXXXXXXXXXXXXXXXXX" → "Штрих-код: XXXXXXXXXXXX * XXXXXXXXXXXX"
+  // Each half is clickable — selects & copies to clipboard without spaces.
+  const BARCODE_RE = /Штрих-код:\s*(\d{12})(\d{12})|Штрих-код:\s*(\d{10})(\d{10})/;
 
   function tryBarcode(textNode) {
     const m = BARCODE_RE.exec(textNode.nodeValue);
@@ -85,7 +94,9 @@
 
     const before = textNode.nodeValue.slice(0, m.index);
     const after = textNode.nodeValue.slice(m.index + m[0].length);
-    const [, first, second] = m;
+    // Groups 1,2 = 12+12; groups 3,4 = 10+10 (alternation)
+    const first  = m[1] || m[3];
+    const second = m[2] || m[4];
 
     const frag = document.createDocumentFragment();
     if (before) frag.appendChild(document.createTextNode(before));
