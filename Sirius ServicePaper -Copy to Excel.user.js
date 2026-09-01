@@ -3,6 +3,8 @@
 // @namespace    https://github.com/SapozhnikUA
 // @version      1.0.0
 // @homepageURL  https://github.com/SapozhnikUA/SIRIUS-CRM/
+// @downloadURL  https://github.com/SapozhnikUA/SIRIUS-CRM/raw/refs/heads/main/Sirius%20ServicePaper%20-Copy%20to%20Excel.user.js
+// @updateURL    https://github.com/SapozhnikUA/SIRIUS-CRM/raw/refs/heads/main/Sirius%20ServicePaper%20-Copy%20to%20Excel.user.js
 // @description  Adds "Copy to Excel" button on ServicePaper page — copies key fields separated by Enter
 // @author       SapozhnikUA
 // @match        https://survey.beko.com/nps/SiriusServicePaper/html/ServicePaper.html*
